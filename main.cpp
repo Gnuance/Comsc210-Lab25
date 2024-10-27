@@ -53,15 +53,42 @@ int main()
     start = high_resolution_clock::now();
     while (getline(inputFile, line))
     {
-        vecCodes.push_back(line);
-        listCodes.push_back(line);
-        setCodes.insert(line);
+        vecCodes.push_back(line); // vector read race
     }
     end = high_resolution_clock::now();
     elapsed = end - start;
     times[0][0] = elapsed.count();
 
-    cout << "Time elapsed: " << elapsed.count() << endl;
+    // clear eof bit and reset cursor to beginning
+    inputFile.clear();
+    inputFile.seekg(0);
+
+    start = high_resolution_clock::now();
+    while (getline(inputFile, line))
+    {
+        listCodes.push_back(line); // list read race
+    }
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[0][1] = elapsed.count();
+
+    // clear eof bit and reset cursor to beginning
+    inputFile.clear();
+    inputFile.seekg(0);
+
+    start = high_resolution_clock::now();
+    while (getline(inputFile, line))
+    {
+        setCodes.insert(line); // set read race
+    }
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[0][2] = elapsed.count();
+
+    // file reading done, close stream
+    inputFile.close();
+
+    cout << "Read times: " << times[0][0] << " | " << times[0][1] << " | " << times[0][2] << endl;
 
     return 0;
 }
