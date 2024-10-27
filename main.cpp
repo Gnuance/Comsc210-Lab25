@@ -142,20 +142,19 @@ int main()
     listCodes.erase(listIter);
     end = high_resolution_clock::now();
     elapsed = end - start;
-    times[2][1] = elapsed.count();
+    times[3][1] = elapsed.count();
 
     start = high_resolution_clock::now();
-    setCodes.insert(INSERT_CODE);
+    setIter = next(setCodes.begin(), setCodes.size() / 2);
+    setCodes.erase(setIter);
     end = high_resolution_clock::now();
     elapsed = end - start;
-    times[2][2] = elapsed.count();
-
-
-
+    times[3][2] = elapsed.count();
 
     cout << "Read times: " << times[0][0] << " | " << times[0][1] << " | " << times[0][2] << endl;
     cout << "Sort times: " << times[1][0] << " | " << times[1][1] << " | " << times[1][2] << endl;
     cout << "Insert times: " << times[2][0] << " | " << times[2][1] << " | " << times[2][2] << endl;
+    cout << "Deletion times: " << times[3][0] << " | " << times[3][1] << " | " << times[3][2] << endl;
 
     return 0;
 }
