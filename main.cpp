@@ -18,6 +18,7 @@
 #include <set>
 #include <fstream> // read data from file
 using namespace std;
+using namespace std::chrono; // so chrono:: doesn't have to be used over and over again
 
 // templated function to read data into whatever container is passed. may not be best option for assignment, but we'll see
 template <typename T>
@@ -25,16 +26,19 @@ void ReadDataInto(T &, const string);
 
 int main()
 {
-    int times[4][3] = {{0}};
-
     // file to read data from
     const string FILE_NAME = "codes.txt";
     ifstream inputFile(FILE_NAME);
-
     // initialize data containers
     vector<string> vecCodes = {};
     list<string> listCodes = {};
     set<string> setCodes = {};
+    // to hold race times
+    int times[4][3] = {{0}};
+    // timer
+    high_resolution_clock::time_point start;
+    high_resolution_clock::time_point end;
+
 
     // guard statement in case input file doesn't open
     if (!inputFile)
@@ -42,6 +46,8 @@ int main()
         cout << "ERROR: Opening " << FILE_NAME << ": File cannot be opened." << endl;
         return 1;
     }
+
+
 
     return 0;
 }
