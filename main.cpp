@@ -16,7 +16,7 @@
 #include <vector>
 #include <list>
 #include <set>
-#include <fstream> // file
+#include <fstream>   // file
 #include <algorithm> // sort
 using namespace std;
 using namespace std::chrono; // so chrono:: doesn't have to be used over and over again
@@ -41,6 +41,8 @@ int main()
     high_resolution_clock::time_point start;
     high_resolution_clock::time_point end;
     duration<double, milli> elapsed;
+    // value to insert for race 3
+    const string INSERT_CODE = "TESTCODE";
 
     // guard statement in case input file doesn't open
     if (!inputFile)
@@ -91,18 +93,34 @@ int main()
 
     // sorting race, only vector and list need to be sorted
     start = high_resolution_clock::now();
-    sort(vecCodes.begin(), vecCodes.end()); // vector read race
+    sort(vecCodes.begin(), vecCodes.end());
     end = high_resolution_clock::now();
     elapsed = end - start;
     times[1][0] = elapsed.count();
 
     start = high_resolution_clock::now();
-    sort(listCodes.begin(), listCodes.end()); // vector read race
+    listCodes.sort();
     end = high_resolution_clock::now();
     elapsed = end - start;
     times[1][1] = elapsed.count();
 
+    times[1][2] = -1; // set is already sorted
+
+    // insert race: place insert code into the middle of the container
+    start = high_resolution_clock::now();
+    vecCodes.insert(vecCodes.begin() + vecCodes.size() / 2, INSERT_CODE);
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[2][0] = elapsed.count();
+
+    start = high_resolution_clock::now();
+    listCodes.insert(listCodes.begin() + listCodes.size() / 2, INSERT_CODE);
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[2][0] = elapsed.count();
+
     cout << "Read times: " << times[0][0] << " | " << times[0][1] << " | " << times[0][2] << endl;
+    cout << "Sort times: " << times[1][0] << " | " << times[1][1] << " | " << times[1][2] << endl;
 
     return 0;
 }
