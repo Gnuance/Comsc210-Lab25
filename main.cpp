@@ -23,7 +23,10 @@ using namespace std;
 template <typename T>
 void ReadDataInto(T &, const string);
 
-int main() {
+int main()
+{
+    int times[4][3] = {{0}};
+
     // file to read data from
     const string FILE_NAME = "codes.txt";
     ifstream inputFile(FILE_NAME);
@@ -33,15 +36,19 @@ int main() {
     list<string> listCodes = {};
     set<string> setCodes = {};
 
-
-
+    // guard statement in case input file doesn't open
+    if (!inputFile)
+    {
+        cout << "ERROR: Opening " << FILE_NAME << ": File cannot be opened." << endl;
+        return 1;
+    }
 
     return 0;
 }
 
 template <typename T>
-void ReadDataInto(T &container, const string fileName){
-
+void ReadDataInto(T &container, const string fileName)
+{
 }
 
 /* syntax examples:
