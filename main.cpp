@@ -21,10 +21,15 @@
 using namespace std;
 using namespace std::chrono; // so chrono:: doesn't have to be used over and over again
 
-void ReadRace(const string);
-void SortRace();
-void InsertRace();
-void DeleteRace();
+// timer
+high_resolution_clock::time_point timerStart;
+high_resolution_clock::time_point timerEnd;
+duration<double, milli> elapsed;
+
+vector<double> ReadRace(vector<string> &, list<string> &, set<string> &, const string);
+vector<double> SortRace();
+vector<double> InsertRace();
+vector<double> DeleteRace();
 
 int main()
 {
@@ -37,10 +42,6 @@ int main()
     set<string> setCodes = {};
     // to hold race times
     double times[4][3] = {{0}}; // vector | list | set
-    // timer
-    high_resolution_clock::time_point start;
-    high_resolution_clock::time_point end;
-    duration<double, milli> elapsed;
     // value to insert for race 3
     const string INSERT_CODE = "TESTCODE";
     // iterators
@@ -48,100 +49,62 @@ int main()
     set<string>::iterator setIter;
 
     // off to the races
-    // time each container separately and reset cusor
-    start = high_resolution_clock::now();
-    while (getline(inputFile, line))
-    {
-        vecCodes.push_back(line); // vector read race
-    }
-    end = high_resolution_clock::now();
-    elapsed = end - start;
-    times[0][0] = elapsed.count();
-
-    // clear eof bit and reset cursor to beginning
-    inputFile.clear();
-    inputFile.seekg(0);
-
-    start = high_resolution_clock::now();
-    while (getline(inputFile, line))
-    {
-        listCodes.push_back(line); // list read race
-    }
-    end = high_resolution_clock::now();
-    elapsed = end - start;
-    times[0][1] = elapsed.count();
-
-    // clear eof bit and reset cursor to beginning
-    inputFile.clear();
-    inputFile.seekg(0);
-
-    start = high_resolution_clock::now();
-    while (getline(inputFile, line))
-    {
-        setCodes.insert(line); // set read race
-    }
-    end = high_resolution_clock::now();
-    elapsed = end - start;
-    times[0][2] = elapsed.count();
-
-    // file reading done, close stream
-    inputFile.close();
 
     // sorting race, only vector and list need to be sorted
-    start = high_resolution_clock::now();
+    timerStart = high_resolution_clock::now();
     sort(vecCodes.begin(), vecCodes.end());
-    end = high_resolution_clock::now();
-    elapsed = end - start;
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
     times[1][0] = elapsed.count();
 
-    start = high_resolution_clock::now();
+    timerStart = high_resolution_clock::now();
     listCodes.sort();
-    end = high_resolution_clock::now();
-    elapsed = end - start;
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
     times[1][1] = elapsed.count();
 
     times[1][2] = -1; // set is already sorted
 
     // insert race: place insert code into the middle of the container
     // set does not allow for manual placement
-    start = high_resolution_clock::now();
+    timerStart = high_resolution_clock::now();
     vecCodes.insert(vecCodes.begin() + vecCodes.size() / 2, INSERT_CODE);
-    end = high_resolution_clock::now();
-    elapsed = end - start;
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
     times[2][0] = elapsed.count();
 
-    start = high_resolution_clock::now();
+    timerStart = high_resolution_clock::now();
     listIter = next(listCodes.begin(), listCodes.size() / 2);
     listCodes.insert(listIter, INSERT_CODE);
-    end = high_resolution_clock::now();
-    elapsed = end - start;
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
     times[2][1] = elapsed.count();
 
-    start = high_resolution_clock::now();
+    timerStart = high_resolution_clock::now();
     setCodes.insert(INSERT_CODE);
-    end = high_resolution_clock::now();
-    elapsed = end - start;
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
     times[2][2] = elapsed.count();
 
     // delete race: delete middle element of containers
-    start = high_resolution_clock::now();
+    timerStart = high_resolution_clock::now();
     vecCodes.erase(vecCodes.begin() + vecCodes.size() / 2);
-    end = high_resolution_clock::now();
-    elapsed = end - start;
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
     times[3][0] = elapsed.count();
 
-    start = high_resolution_clock::now();
+    timerStart = high_resolution_clock::now();
     listIter = next(listCodes.begin(), listCodes.size() / 2);
     listCodes.erase(listIter);
-    end = high_resolution_clock::now();
-    elapsed = end - start;
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
     times[3][1] = elapsed.count();
 
-    start = high_resolution_clock::now();
+    timerStart = high_resolution_clock::now();
     setIter = next(setCodes.begin(), setCodes.size() / 2);
     setCodes.erase(setIter);
-    end = high_resolution_clock::now();
-    elapsed = end - start;
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
     times[3][2] = elapsed.count();
 
     cout << "Read times: " << times[0][0] << " | " << times[0][1] << " | " << times[0][2] << endl;
@@ -152,7 +115,7 @@ int main()
     return 0;
 }
 
-void ReadRace(const string FILE_NAME)
+vector<double> ReadRace(vector<string> &vecCodes, list<string> &listCodes, set<string> &setCodes, const string FILE_NAME)
 {
     ifstream inputFile(FILE_NAME);
     string line = "";
@@ -160,8 +123,45 @@ void ReadRace(const string FILE_NAME)
     if (!inputFile)
     {
         cout << "ERROR: Opening " << FILE_NAME << ": File cannot be opened." << endl;
-        return 1;
     }
+    // time each container separately and reset cusor
+    timerStart = high_resolution_clock::now();
+    while (getline(inputFile, line))
+    {
+        vecCodes.push_back(line); // vector read race
+    }
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
+    times[0][0] = elapsed.count();
+
+    // clear eof bit and reset cursor to beginning
+    inputFile.clear();
+    inputFile.seekg(0);
+
+    timerStart = high_resolution_clock::now();
+    while (getline(inputFile, line))
+    {
+        listCodes.push_back(line); // list read race
+    }
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
+    times[0][1] = elapsed.count();
+
+    // clear eof bit and reset cursor to beginning
+    inputFile.clear();
+    inputFile.seekg(0);
+
+    timerStart = high_resolution_clock::now();
+    while (getline(inputFile, line))
+    {
+        setCodes.insert(line); // set read race
+    }
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
+    times[0][2] = elapsed.count();
+
+    // file reading done, close stream
+    inputFile.close();
 }
 void SortRace();
 void InsertRace();
