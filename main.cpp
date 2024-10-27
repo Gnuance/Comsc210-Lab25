@@ -130,6 +130,29 @@ int main()
     elapsed = end - start;
     times[2][2] = elapsed.count();
 
+    // delete race: delete middle element of containers
+    start = high_resolution_clock::now();
+    vecCodes.erase(vecCodes.begin() + vecCodes.size() / 2);
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[3][0] = elapsed.count();
+
+    start = high_resolution_clock::now();
+    listIter = next(listCodes.begin(), listCodes.size() / 2);
+    listCodes.erase(listIter);
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[2][1] = elapsed.count();
+
+    start = high_resolution_clock::now();
+    setCodes.insert(INSERT_CODE);
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[2][2] = elapsed.count();
+
+
+
+
     cout << "Read times: " << times[0][0] << " | " << times[0][1] << " | " << times[0][2] << endl;
     cout << "Sort times: " << times[1][0] << " | " << times[1][1] << " | " << times[1][2] << endl;
     cout << "Insert times: " << times[2][0] << " | " << times[2][1] << " | " << times[2][2] << endl;
