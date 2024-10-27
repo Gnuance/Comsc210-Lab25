@@ -35,7 +35,7 @@ int main()
     list<string> listCodes = {};
     set<string> setCodes = {};
     // to hold race times
-    int times[4][3] = {{0}}; // vector | list | set
+    double times[4][3] = {{0}}; // vector | list | set
     // timer
     high_resolution_clock::time_point start;
     high_resolution_clock::time_point end;
@@ -49,6 +49,7 @@ int main()
     }
 
     // off to the races
+    // time each container separately and reset cusor
     start = high_resolution_clock::now();
     while (getline(inputFile, line))
     {
@@ -58,7 +59,10 @@ int main()
     }
     end = high_resolution_clock::now();
     elapsed = end - start;
-    
+    times[0][0] = elapsed.count();
+
+    cout << "Time elapsed: " << elapsed.count() << endl;
+
     return 0;
 }
 
