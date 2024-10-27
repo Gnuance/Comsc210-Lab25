@@ -16,7 +16,8 @@
 #include <vector>
 #include <list>
 #include <set>
-#include <fstream> // read data from file
+#include <fstream> // file
+#include <algorithm> // sort
 using namespace std;
 using namespace std::chrono; // so chrono:: doesn't have to be used over and over again
 
@@ -87,6 +88,19 @@ int main()
 
     // file reading done, close stream
     inputFile.close();
+
+    // sorting race, only vector and list need to be sorted
+    start = high_resolution_clock::now();
+    sort(vecCodes.begin(), vecCodes.end()); // vector read race
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[1][0] = elapsed.count();
+
+    start = high_resolution_clock::now();
+    sort(listCodes.begin(), listCodes.end()); // vector read race
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[1][1] = elapsed.count();
 
     cout << "Read times: " << times[0][0] << " | " << times[0][1] << " | " << times[0][2] << endl;
 
