@@ -25,6 +25,14 @@ using namespace std::chrono; // so chrono:: doesn't have to be used over and ove
 template <typename T>
 void ReadDataInto(T &, const string);
 
+// global variables to use throughout functions
+// to hold race times
+double times[4][3] = {{0}}; // vector | list | set
+// timer
+high_resolution_clock::time_point start;
+high_resolution_clock::time_point timerEnd;
+duration<double, milli> elapsed;
+
 int main()
 {
     // file to read data from
@@ -35,12 +43,7 @@ int main()
     vector<string> vecCodes = {};
     list<string> listCodes = {};
     set<string> setCodes = {};
-    // to hold race times
-    double times[4][3] = {{0}}; // vector | list | set
-    // timer
-    high_resolution_clock::time_point start;
-    high_resolution_clock::time_point end;
-    duration<double, milli> elapsed;
+
     // value to insert for race 3
     const string INSERT_CODE = "TESTCODE";
     // iterators
@@ -61,7 +64,7 @@ int main()
     {
         vecCodes.push_back(line); // vector read race
     }
-    end = high_resolution_clock::now();
+    timerEnd = high_resolution_clock::now();
     elapsed = end - start;
     times[0][0] = elapsed.count();
 
