@@ -29,16 +29,17 @@ int main()
     // file to read data from
     const string FILE_NAME = "codes.txt";
     ifstream inputFile(FILE_NAME);
+    string line = "";
     // initialize data containers
     vector<string> vecCodes = {};
     list<string> listCodes = {};
     set<string> setCodes = {};
     // to hold race times
-    int times[4][3] = {{0}};
+    int times[4][3] = {{0}}; // vector | list | set
     // timer
     high_resolution_clock::time_point start;
     high_resolution_clock::time_point end;
-
+    duration<double, milli> elapsed;
 
     // guard statement in case input file doesn't open
     if (!inputFile)
@@ -47,8 +48,17 @@ int main()
         return 1;
     }
 
-
-
+    // off to the races
+    start = high_resolution_clock::now();
+    while (getline(inputFile, line))
+    {
+        vecCodes.push_back(line);
+        listCodes.push_back(line);
+        setCodes.insert(line);
+    }
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    
     return 0;
 }
 
