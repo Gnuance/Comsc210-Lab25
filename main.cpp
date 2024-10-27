@@ -43,6 +43,9 @@ int main()
     duration<double, milli> elapsed;
     // value to insert for race 3
     const string INSERT_CODE = "TESTCODE";
+    // iterators
+    list<string>::iterator listIter;
+    set<string>::iterator setIter;
 
     // guard statement in case input file doesn't open
     if (!inputFile)
@@ -107,6 +110,7 @@ int main()
     times[1][2] = -1; // set is already sorted
 
     // insert race: place insert code into the middle of the container
+    // set does not allow for manual placement
     start = high_resolution_clock::now();
     vecCodes.insert(vecCodes.begin() + vecCodes.size() / 2, INSERT_CODE);
     end = high_resolution_clock::now();
@@ -114,13 +118,21 @@ int main()
     times[2][0] = elapsed.count();
 
     start = high_resolution_clock::now();
-    listCodes.insert(listCodes.begin() + listCodes.size() / 2, INSERT_CODE);
+    listIter = next(listCodes.begin(), listCodes.size() / 2);
+    listCodes.insert(listIter, INSERT_CODE);
     end = high_resolution_clock::now();
     elapsed = end - start;
-    times[2][0] = elapsed.count();
+    times[2][1] = elapsed.count();
+
+    start = high_resolution_clock::now();
+    setCodes.insert(INSERT_CODE);
+    end = high_resolution_clock::now();
+    elapsed = end - start;
+    times[2][2] = elapsed.count();
 
     cout << "Read times: " << times[0][0] << " | " << times[0][1] << " | " << times[0][2] << endl;
     cout << "Sort times: " << times[1][0] << " | " << times[1][1] << " | " << times[1][2] << endl;
+    cout << "Insert times: " << times[2][0] << " | " << times[2][1] << " | " << times[2][2] << endl;
 
     return 0;
 }
