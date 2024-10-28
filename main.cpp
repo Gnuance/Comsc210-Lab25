@@ -11,6 +11,8 @@
 */
 
 #include <iostream>
+#include <iomanip> // align output
+#include <cstdio> // right align output
 #include <chrono>
 // required data classes
 #include <vector>
@@ -98,9 +100,9 @@ int main()
     elapsed = timerEnd - timerStart;
     times[3][2] = elapsed.count();
 
-    cout << "Operation" << "\tVector" << "\tList" << "\tSet\n";
-    cout << "Read\t" << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n";
-    cout << "Sort\t " << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n";
+    cout << right << setw(10) << fixed<< "Operation" << "\tVector" << "\tList" << "\tSet\n"
+         << "Read\t" << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n"
+         << "Sort\t " << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n";
     // cout << "Insert times: " << times[2][0] << " | " << times[2][1] << " | " << times[2][2] << endl;
     // cout << "Deletion times: " << times[3][0] << " | " << times[3][1] << " | " << times[3][2] << endl;
 
