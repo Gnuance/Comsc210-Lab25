@@ -23,7 +23,7 @@
 using namespace std;
 using namespace std::chrono; // so chrono:: doesn't have to be used over and over again
 
-// timers to be used in functions
+// timers to be used in functions. To truly de-couple, they could be initialized inside each function
 high_resolution_clock::time_point timerStart;
 high_resolution_clock::time_point timerEnd;
 duration<double, milli> elapsed;
@@ -68,6 +68,7 @@ vector<double> ReadRace(vector<string> &vecCodes, list<string> &listCodes, set<s
     vector<double> results = {};
     ifstream inputFile(FILE_NAME);
     string line = "";
+
     // guard statement in case input file doesn't open
     if (!inputFile)
     {
@@ -119,6 +120,8 @@ vector<double> ReadRace(vector<string> &vecCodes, list<string> &listCodes, set<s
 vector<double> SortRace(vector<string> &vecCodes, list<string> &listCodes, set<string> &setCodes)
 {
     vector<double> results = {};
+
+    // vector, then list, then set
     timerStart = high_resolution_clock::now();
     sort(vecCodes.begin(), vecCodes.end());
     timerEnd = high_resolution_clock::now();
