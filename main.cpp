@@ -4,7 +4,6 @@
             a. The first race is READING. The challenge is to read the 20,000 data elements into each of these data structures: vector, list, set
             b. The second race is SORTING. Sort the vector and sort the list. Set the set's value to -1 since a set is already sorted.
             c. The third race is INSERTING. Insert the value "TESTCODE" into the middle of the vector or the middle of the list, or into the set
-            d. The fourth race is DELETING. Delete the middle-ish element of the vector, the list, or the set
         2. Use the cool time features of the <chrono> library. You'll just be using a stopwatch on these operations.
     Requirements:
         1. Make your code scalable. It should be simple to add new races.
