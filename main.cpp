@@ -21,20 +21,23 @@
 using namespace std;
 using namespace std::chrono; // so chrono:: doesn't have to be used over and over again
 
-// timer
+// timers to be used in functions
 high_resolution_clock::time_point timerStart;
 high_resolution_clock::time_point timerEnd;
 duration<double, milli> elapsed;
 
+// individual race functions
 vector<double> ReadRace(vector<string> &, list<string> &, set<string> &, const string);
-vector<double> SortRace();
-vector<double> InsertRace();
-vector<double> DeleteRace();
+vector<double> SortRace(vector<string> &, list<string> &, set<string> &);
+vector<double> InsertRace(vector<string> &, list<string> &, set<string> &, const string);
+vector<double> DeleteRace(vector<string> &, list<string> &, set<string> &);
 
 int main()
 {
     // file to read data from
     const string FILE_NAME = "codes.txt";
+
+    vector<double> readRaceResults = {};
 
     // initialize data containers
     vector<string> vecCodes = {};
@@ -49,6 +52,7 @@ int main()
     set<string>::iterator setIter;
 
     // off to the races
+    readRaceResults = ReadRace(vecCodes, listCodes, setCodes, FILE_NAME);
 
     // sorting race, only vector and list need to be sorted
     timerStart = high_resolution_clock::now();
@@ -107,7 +111,7 @@ int main()
     elapsed = timerEnd - timerStart;
     times[3][2] = elapsed.count();
 
-    cout << "Read times: " << times[0][0] << " | " << times[0][1] << " | " << times[0][2] << endl;
+    cout << "Read times: " << readRaceResults.at(0) << " | " << readRaceResults.at(1) << " | " << readRaceResults.at(2) << endl;
     cout << "Sort times: " << times[1][0] << " | " << times[1][1] << " | " << times[1][2] << endl;
     cout << "Insert times: " << times[2][0] << " | " << times[2][1] << " | " << times[2][2] << endl;
     cout << "Deletion times: " << times[3][0] << " | " << times[3][1] << " | " << times[3][2] << endl;
@@ -117,6 +121,7 @@ int main()
 
 vector<double> ReadRace(vector<string> &vecCodes, list<string> &listCodes, set<string> &setCodes, const string FILE_NAME)
 {
+    vector<double> times = {};
     ifstream inputFile(FILE_NAME);
     string line = "";
     // guard statement in case input file doesn't open
@@ -132,7 +137,7 @@ vector<double> ReadRace(vector<string> &vecCodes, list<string> &listCodes, set<s
     }
     timerEnd = high_resolution_clock::now();
     elapsed = timerEnd - timerStart;
-    times[0][0] = elapsed.count();
+    times.push_back(elapsed.count());
 
     // clear eof bit and reset cursor to beginning
     inputFile.clear();
@@ -145,7 +150,7 @@ vector<double> ReadRace(vector<string> &vecCodes, list<string> &listCodes, set<s
     }
     timerEnd = high_resolution_clock::now();
     elapsed = timerEnd - timerStart;
-    times[0][1] = elapsed.count();
+    times.push_back(elapsed.count());
 
     // clear eof bit and reset cursor to beginning
     inputFile.clear();
@@ -158,10 +163,12 @@ vector<double> ReadRace(vector<string> &vecCodes, list<string> &listCodes, set<s
     }
     timerEnd = high_resolution_clock::now();
     elapsed = timerEnd - timerStart;
-    times[0][2] = elapsed.count();
+    times.push_back(elapsed.count());
 
     // file reading done, close stream
     inputFile.close();
+
+    return times;
 }
 void SortRace();
 void InsertRace();
