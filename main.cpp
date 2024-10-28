@@ -38,6 +38,7 @@ int main()
     const string FILE_NAME = "codes.txt";
 
     vector<double> readRaceResults = {};
+    vector<double> sortRaceResults = {};
 
     // initialize data containers
     vector<string> vecCodes = {};
@@ -53,21 +54,7 @@ int main()
 
     // off to the races
     readRaceResults = ReadRace(vecCodes, listCodes, setCodes, FILE_NAME);
-
-    // sorting race, only vector and list need to be sorted
-    timerStart = high_resolution_clock::now();
-    sort(vecCodes.begin(), vecCodes.end());
-    timerEnd = high_resolution_clock::now();
-    elapsed = timerEnd - timerStart;
-    times[1][0] = elapsed.count();
-
-    timerStart = high_resolution_clock::now();
-    listCodes.sort();
-    timerEnd = high_resolution_clock::now();
-    elapsed = timerEnd - timerStart;
-    times[1][1] = elapsed.count();
-
-    times[1][2] = -1; // set is already sorted
+    sortRaceResults = SortRace(vecCodes, listCodes, setCodes);
 
     // insert race: place insert code into the middle of the container
     // set does not allow for manual placement
@@ -111,10 +98,11 @@ int main()
     elapsed = timerEnd - timerStart;
     times[3][2] = elapsed.count();
 
-    cout << "Read times: " << readRaceResults.at(0) << " | " << readRaceResults.at(1) << " | " << readRaceResults.at(2) << endl;
-    cout << "Sort times: " << times[1][0] << " | " << times[1][1] << " | " << times[1][2] << endl;
-    cout << "Insert times: " << times[2][0] << " | " << times[2][1] << " | " << times[2][2] << endl;
-    cout << "Deletion times: " << times[3][0] << " | " << times[3][1] << " | " << times[3][2] << endl;
+    cout << "Operation" << "\tVector" << "\tList" << "\tSet\n";
+    cout << "Read\t" << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n";
+    cout << "Sort\t " << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n";
+    // cout << "Insert times: " << times[2][0] << " | " << times[2][1] << " | " << times[2][2] << endl;
+    // cout << "Deletion times: " << times[3][0] << " | " << times[3][1] << " | " << times[3][2] << endl;
 
     return 0;
 }
@@ -170,9 +158,28 @@ vector<double> ReadRace(vector<string> &vecCodes, list<string> &listCodes, set<s
 
     return times;
 }
-void SortRace();
-void InsertRace();
-void DeleteRace();
+
+// sorting race, only vector and list need to be sorted
+vector<double> SortRace(vector<string> &vecCodes, list<string> &listCodes, set<string> &setCodes)
+{
+    vector<double> times = {};
+    timerStart = high_resolution_clock::now();
+    sort(vecCodes.begin(), vecCodes.end());
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
+    times.push_back(elapsed.count());
+
+    timerStart = high_resolution_clock::now();
+    listCodes.sort();
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
+    times.push_back(elapsed.count());
+
+    times.push_back(-1); // set is already sorted
+    return times;
+}
+vector<double> InsertRace(vector<string> &, list<string> &, set<string> &, const string);
+vector<double> DeleteRace(vector<string> &, list<string> &, set<string> &);
 
 /* syntax examples:
 auto start = high_resolution_clock::now()
