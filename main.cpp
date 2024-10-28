@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include <iomanip> // align output
-#include <cstdio> // right align output
+#include <cstdio>  // right align output
 #include <chrono>
 // required data classes
 #include <vector>
@@ -41,6 +41,8 @@ int main()
 
     vector<double> readRaceResults = {};
     vector<double> sortRaceResults = {};
+    vector<double> insertRaceResults = {};
+    vector<double> deleteRaceResults = {};
 
     // initialize data containers
     vector<string> vecCodes = {};
@@ -57,27 +59,7 @@ int main()
     // off to the races
     readRaceResults = ReadRace(vecCodes, listCodes, setCodes, FILE_NAME);
     sortRaceResults = SortRace(vecCodes, listCodes, setCodes);
-
-    // insert race: place insert code into the middle of the container
-    // set does not allow for manual placement
-    timerStart = high_resolution_clock::now();
-    vecCodes.insert(vecCodes.begin() + vecCodes.size() / 2, INSERT_CODE);
-    timerEnd = high_resolution_clock::now();
-    elapsed = timerEnd - timerStart;
-    times[2][0] = elapsed.count();
-
-    timerStart = high_resolution_clock::now();
-    listIter = next(listCodes.begin(), listCodes.size() / 2);
-    listCodes.insert(listIter, INSERT_CODE);
-    timerEnd = high_resolution_clock::now();
-    elapsed = timerEnd - timerStart;
-    times[2][1] = elapsed.count();
-
-    timerStart = high_resolution_clock::now();
-    setCodes.insert(INSERT_CODE);
-    timerEnd = high_resolution_clock::now();
-    elapsed = timerEnd - timerStart;
-    times[2][2] = elapsed.count();
+    insertRaceResults = InsertRace(vecCodes, listCodes, setCodes, INSERT_CODE);
 
     // delete race: delete middle element of containers
     timerStart = high_resolution_clock::now();
@@ -100,9 +82,14 @@ int main()
     elapsed = timerEnd - timerStart;
     times[3][2] = elapsed.count();
 
-    cout << right << setw(10) << fixed<< "Operation" << "\tVector" << "\tList" << "\tSet\n"
-         << "Read\t" << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n"
-         << "Sort\t " << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n";
+    // cout << right << setw(10) << fixed<< "Operation" << "\tVector" << "\tList" << "\tSet\n"
+    //      << "Read\t" << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n"
+    //      << "Sort\t " << readRaceResults.at(0) << "\t" << readRaceResults.at(1) << "\t" << readRaceResults.at(2) << "\n";
+
+    printf("%10s\t%10s\t%10s\t%10s\t\n", "Operation", "Vector", "List", "Set");
+    printf("%10s\t%10f\t%10f\t%10f\t\n", "Read", readRaceResults.at(0), readRaceResults.at(1), readRaceResults.at(2));
+    printf("%10s\t%10f\t%10f\t%10f\t\n", "Sort", sortRaceResults.at(0), sortRaceResults.at(1), sortRaceResults.at(2));
+    printf("%10s\t%10f\t%10f\t%10f\t\n", "Insert", insertRaceResults.at(0), insertRaceResults.at(1), insertRaceResults.at(2));
     // cout << "Insert times: " << times[2][0] << " | " << times[2][1] << " | " << times[2][2] << endl;
     // cout << "Deletion times: " << times[3][0] << " | " << times[3][1] << " | " << times[3][2] << endl;
 
@@ -180,7 +167,34 @@ vector<double> SortRace(vector<string> &vecCodes, list<string> &listCodes, set<s
     times.push_back(-1); // set is already sorted
     return times;
 }
-vector<double> InsertRace(vector<string> &, list<string> &, set<string> &, const string);
+
+// insert race: place insert code into the middle of the container
+// set does not allow for manual placement
+vector<double> InsertRace(vector<string> &vecCodes, list<string> &listCodes, set<string> &setCodes, const string INSERT_CODE)
+{
+    vector<double> times = {};
+    list<string>::iterator listIter;
+    timerStart = high_resolution_clock::now();
+    vecCodes.insert(vecCodes.begin() + vecCodes.size() / 2, INSERT_CODE);
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
+    times.push_back(elapsed.count());
+
+    timerStart = high_resolution_clock::now();
+    listIter = next(listCodes.begin(), listCodes.size() / 2);
+    listCodes.insert(listIter, INSERT_CODE);
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
+    times.push_back(elapsed.count());
+
+    timerStart = high_resolution_clock::now();
+    setCodes.insert(INSERT_CODE);
+    timerEnd = high_resolution_clock::now();
+    elapsed = timerEnd - timerStart;
+    times.push_back(elapsed.count());
+
+    return times;
+}
 vector<double> DeleteRace(vector<string> &, list<string> &, set<string> &);
 
 /* syntax examples:
